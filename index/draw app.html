@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>고급 그림판</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      background: #eee;
+    }
+    canvas {
+      flex: 1;
+      border: 1px solid #ccc;
+      cursor: none;
+    }
+    .frame-controls {
+      margin-left: auto;
+    }
+    #cursor-preview {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      border: 1px solid #00000055;
+      background-color: transparent;
+      mix-blend-mode: difference;
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <select id="tool">
+      <option value="pen">펜</option>
+      <option value="marker">마커</option>
+      <option value="dots">점선</option>
+      <option value="eraser">지우개</option>
+      <option value="fill">페인트통</option>
+      <option value="eyedropper">스포이드</option>
+      <option value="text">텍스트</option>
+      <option value="move">이동</option>
+    </select>
+    <input type="color" id="color" value="#000000" />
+    <input type="range" id="size" min="1" max="30" value="5" />
+    <button onclick="undo()">Undo (Ctrl+Z)</button>
+    <button onclick="redo()">Redo (Ctrl+Y)</button>
+    <label><input type="checkbox" id="copyPrevFrame" checked /> 이전 프레임 복사</label>
+    <div class="frame-controls">
+      <button onclick="addFrame()">+ 프레임</button>
+      <button onclick="prevFrame()">◀ 이전</button>
+      <button onclick="nextFrame()">다음 ▶</button>
+    </div>
+  </div>
+  <canvas id="canvas" width="1200" height="800"></canvas>
+  <canvas id="tempCanvas" width="1200" height="800" style="position:absolute; top:0; left:0; pointer-events:none;"></canvas>
+  <div id="cursor-preview"></div>
+
+  <script>
+    // ... 기존 코드 생략 ...
+
+    function handleFrameSwitch() {
+      const copyPrev = document.getElementById("copyPrevFrame").checked;
+
+      if (frames[currentFrame]) {
+        ctx.putImageData(frames[currentFrame], 0, 0);
+      } else if (copyPrev && currentFrame > 0 && frames[currentFrame - 1]) {
+        ctx.putImageData(frames[currentFrame - 1], 0, 0);
+      } else {
+        clearCanvas();
+      }
+    }
+
+    // ... 기존 코드 생략 ...
+  </script>
+</body>
+</html>
